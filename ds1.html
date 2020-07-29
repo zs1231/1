@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="Baiduspider" content="noindex,nofollow" />
+<meta name="Sosospider" content="noindex,nofollow" /> 
+<meta name="sogou spider" content="noindex,nofollow" />
+<meta name="360Spider" content="noindex,nofollow" /> 
+<meta name="YodaoBot" content="noindex,nofollow" /> 
+<meta name="Googlebot" content="noindex,nofollow" /> 
+<meta name="MicroMessenger" content="noindex,nofollow" />
+<meta name="QQBrowser" content="noindex,nofollow" /> 
+<meta content=yes name=apple-mobile-web-app-capable>
+<meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<title>进入中……</title>
+
+</head>
+<script src="https://js-libs.oss-cn-hangzhou.aliyuncs.com/jquery2.0.0.js"></script>
+
+<body>
+<script>
+apiurl ='http://wsss.bmxqxzl.cn/index.php?s=/Home/Api/geturl/appkey/TURBd01EQXdNREF3TUlkNjJhOA';
+var searchURL = window.location.search;
+	
+	/**
+     * 智能截取url参数中的数值
+     * getParamNumber 获取参数值中从第n位开始截取len长度的数字，当遇到非数字类型时终止截取
+     * 注：依赖 getParamVal 函数
+     * 返回截取后的数值，number类型
+     */
+    function substrv(str, startStr, len) {
+    	var len =len?len:0;
+       var start_num =str.indexOf(startStr);
+       if(len>0){
+    		return	str.substr(start_num,len);
+       }
+	   return str.substring(start_num, str.length);
+    }
+	var start_num =searchURL.indexOf('__url=');
+	var end_num =searchURL.length;
+	searchURL = searchURL.substring(1, end_num);
+    /**
+     * getParamVal 基础函数
+     * 获取url中参数的key和value
+     * 返回json对象
+     */
+    function getVal() {
+        var params = {};
+
+        if ( location.search !== '' ) {
+            var arr = location.search.substring(1).split('&');
+
+            for ( var i = 0, iLen = arr.length; i < iLen; i ++ ) {
+                var aTmp = arr[i].split('='), value = decodeURIComponent(aTmp[1]), numberVal = Number(value);
+                //处理数字
+                if ( typeof numberVal === 'number' && numberVal === numberVal ) {
+                    value = numberVal;
+                }
+                //处理布尔值
+                if ( value === 'true' || value === 'false' ) {
+                    value = value === 'true';
+                }
+                params[aTmp[0]] = value;
+            }
+        }
+        return params;
+    }
+	
+	if(start_num>0){
+	searchURL =substrv(searchURL,'__p=');
+	apiurl =decodeURI(getQueryString('__url'));
+}
+function getQueryString(name) {
+ 
+	var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+	var r = window.location.search.substr(1).match(reg);
+ 
+	if (r != null) {
+	return unescape(r[2]);
+	}
+	return null;
+}
+
+$.ajax({
+type : 'get',
+url : apiurl,
+contentType: "application/json",
+data:{},
+dataType : 'jsonp',
+jsonp: "callback",
+jsonpCallback:"Handler",
+success : function(data){
+if(data.status=="200"){  
+var jumpurl = data.url;
+//alert(searchURL);
+window.location.href='http://'+ jumpurl  +searchURL;
+}
+},
+error: function () {
+}
+});
+
+function onBridgeReady(){
+WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined"){
+if( document.addEventListener ){
+document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+}else if (document.attachEvent){
+document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+}
+}else{
+onBridgeReady();
+}
+document.oncontextmenu = function(){
+event.returnValue = false;
+}
+	
+    
+
+</script>
+</body>
+</html>
